@@ -32,7 +32,6 @@ import com.google.cloud.retail.v2.Product;
 import com.google.cloud.retail.v2.ProductInlineSource;
 import com.google.cloud.retail.v2.ProductInputConfig;
 import com.google.cloud.retail.v2.ProductServiceClient;
-import com.google.cloud.retail.v2.ProductServiceSettings;
 import com.google.protobuf.FieldMask;
 
 import java.io.IOException;
@@ -44,30 +43,59 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-public class ImportProductsInlineSource {
+public final class ImportProductsInlineSource {
 
-  public static final String PROJECT_NUMBER = System.getenv("PROJECT_NUMBER");
+  /**
+   * This variable describes project number getting from environment variable.
+   */
+  private static final String PROJECT_NUMBER = System.getenv("PROJECT_NUMBER");
 
-  public static final String ENDPOINT = "retail.googleapis.com:443";
+  /**
+   * This variable describes default catalog name.
+   */
+  private static final String DEFAULT_CATALOG = String.format(
+      "projects/%s/locations/global/catalogs/default_catalog/"
+          + "branches/default_branch", PROJECT_NUMBER);
 
-  public static final String DEFAULT_CATALOG = String.format(
-      "projects/%s/locations/global/catalogs/default_catalog/branches/default_branch",
-      PROJECT_NUMBER);
-
+  /**
+   * This variable describes generated product id for field setting.
+   */
   private static final String GENERATED_PRODUCT_ID = UUID.randomUUID()
       .toString();
 
-  // prepare product to import as inline source
+  private ImportProductsInlineSource() {
+  }
+
+  /**
+   * Get product service client.
+   *
+   * @return ProductServiceClient.
+   * @throws IOException if endpoint is incorrect.
+   */
+  private static ProductServiceClient getProductServiceClient()
+      throws IOException {
+    return ProductServiceClient.create();
+  }
+
+  /**
+   * Prepare product to import as inline source.
+   *
+   * @return List of products.
+   */
   public static List<Product> getProducts() {
     List<Product> products = new ArrayList<>();
 
     Product product1;
     Product product2;
 
+    final float price1 = 16f;
+    final float originalPrice1 = 45.0f;
+    final float cost1 = 12.0f;
+
     PriceInfo priceInfo1 = PriceInfo.newBuilder()
-        .setPrice(16f)
-        .setOriginalPrice(45.0f)
-        .setCost(12.0f)
+        .setPrice(price1)
+        .setOriginalPrice(originalPrice1)
+        .setCost(cost1)
         .setCurrencyCode("USD")
         .build();
 
@@ -92,7 +120,8 @@ public class ImportProductsInlineSource {
         .setId(GENERATED_PRODUCT_ID)
         .addAllCategories(Collections.singletonList("Office"))
         .setUri(
-            "https://shop.googlemerchandisestore.com/Google+Redesign/Office/IamRemarkable+Pen")
+            "https://shop.googlemerchandisestore.com/Google+Redesign/"
+                + "Office/IamRemarkable+Pen")
         .addBrands("#IamRemarkable")
         .setPriceInfo(priceInfo1)
         .setColorInfo(colorInfo1)
@@ -100,10 +129,14 @@ public class ImportProductsInlineSource {
         .setRetrievableFields(fieldMask1)
         .build();
 
+    final float price2 = 35f;
+    final float originalPrice2 = 45.0f;
+    final float cost2 = 12.0f;
+
     PriceInfo priceInfo2 = PriceInfo.newBuilder()
-        .setPrice(35f)
-        .setOriginalPrice(45.0f)
-        .setCost(12.0f)
+        .setPrice(price2)
+        .setOriginalPrice(originalPrice2)
+        .setCost(cost2)
         .setCurrencyCode("USD")
         .build();
 
@@ -127,7 +160,8 @@ public class ImportProductsInlineSource {
         .setId(GENERATED_PRODUCT_ID)
         .addCategories("Apparel")
         .setUri(
-            "https://shop.googlemerchandisestore.com/Google+Redesign/Apparel/Android+Embroidered+Crewneck+Sweater")
+            "https://shop.googlemerchandisestore.com/Google+Redesign/"
+                + "Apparel/Android+Embroidered+Crewneck+Sweater")
         .addBrands("Android")
         .setPriceInfo(priceInfo2)
         .setColorInfo(colorInfo2)
@@ -141,19 +175,14 @@ public class ImportProductsInlineSource {
     return products;
   }
 
-  // get product service client
-  private static ProductServiceClient getProductServiceClient()
-      throws IOException {
-    ProductServiceSettings productServiceSettings =
-        ProductServiceSettings.newBuilder()
-            .setEndpoint(ENDPOINT)
-            .build();
-    return ProductServiceClient.create(productServiceSettings);
-  }
-
-  // get import products from inline source request
+  /**
+   * Get import products from inline source request.
+   *
+   * @param productsToImport List of products to import.
+   * @return ImportProductsRequest.
+   */
   public static ImportProductsRequest getImportProductsInlineRequest(
-      List<Product> productsToImport) {
+      final List<Product> productsToImport) {
     // TO CHECK ERROR HANDLING PASTE THE INVALID CATALOG NAME HERE:
     // default_catalog = "invalid_catalog_name"
 
@@ -176,7 +205,17 @@ public class ImportProductsInlineSource {
     return importRequest;
   }
 
-  // call the Retail API to import products
+  /**
+   * Call the Retail API to import products.
+   *
+   * @throws IOException          from the called method.
+   * @throws ExecutionException   when attempting to retrieve the result of a
+   *                              task that aborted by throwing an exception.
+   * @throws InterruptedException when a thread is waiting, sleeping, or
+   *                              otherwise occupied, and the thread is
+   *                              interrupted, either before or during the
+   *                              activity.
+   */
   public static void importProductsFromInlineSource()
       throws IOException, ExecutionException, InterruptedException {
     ImportProductsRequest importRequest = getImportProductsInlineRequest(
@@ -191,24 +230,39 @@ public class ImportProductsInlineSource {
     while (!importOperation.isDone()) {
       System.out.println("Please wait till operation is done.");
 
-      getProductServiceClient().awaitTermination(5, TimeUnit.SECONDS);
+      final int awaitDuration = 5;
+
+      getProductServiceClient().awaitTermination(
+          awaitDuration, TimeUnit.SECONDS);
 
       System.out.println("Import products operation is done.");
 
-      System.out.printf("Number of successfully imported products: %s%n",
-          importOperation.getMetadata().get().getSuccessCount());
+      if (importOperation.getMetadata().get() != null) {
+        System.out.printf("Number of successfully imported products: %s%n",
+            importOperation.getMetadata().get().getSuccessCount());
 
-      System.out.printf("Number of failures during the importing: %s%n",
-          importOperation.getMetadata().get().getFailureCount());
-
-      System.out.printf("Operation result: %s%n", importOperation.get());
+        System.out.printf("Number of failures during the importing: %s%n",
+            importOperation.getMetadata().get().getFailureCount());
+      } else {
+        System.out.println("Metadata in bigQuery operation is empty.");
+      }
+      if (importOperation.get() != null) {
+        System.out.printf("Operation result: %s%n", importOperation.get());
+      } else {
+        System.out.println("Operation result is empty.");
+      }
     }
   }
 
-  // [END retail_import_products_from_inline_source]
-
-  public static void main(String[] args)
+  /**
+   * Executable tutorial class.
+   *
+   * @param args command line arguments.
+   */
+  public static void main(final String[] args)
       throws IOException, ExecutionException, InterruptedException {
     importProductsFromInlineSource();
   }
 }
+
+// [END retail_import_products_from_inline_source]

@@ -30,50 +30,68 @@ import com.google.cloud.retail.v2.ImportProductsRequest.ReconciliationMode;
 import com.google.cloud.retail.v2.ImportProductsResponse;
 import com.google.cloud.retail.v2.ProductInputConfig;
 import com.google.cloud.retail.v2.ProductServiceClient;
-import com.google.cloud.retail.v2.ProductServiceSettings;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-public class ImportProductsGcs {
+public final class ImportProductsGcs {
 
-  // Read the project number from the environment variable
-  public static final String PROJECT_NUMBER = System.getenv("PROJECT_NUMBER");
+  /**
+   * This variable describes project number getting from environment variable.
+   */
+  private static final String PROJECT_NUMBER = System.getenv("PROJECT_NUMBER");
 
-  public static final String ENDPOINT = "retail.googleapis.com:443";
+  /**
+   * This variable describes default catalog name.
+   */
+  private static final String DEFAULT_CATALOG = String.format(
+      "projects/%s/locations/global/catalogs/default_catalog/"
+          + "branches/default_branch", PROJECT_NUMBER);
 
-  // You can change the branch here. The "default_branch" is set to point to the branch "0"
-  public static final String DEFAULT_CATALOG = String.format(
-      "projects/%s/locations/global/catalogs/default_catalog/branches/default_branch",
-      PROJECT_NUMBER);
-
-  // Read bucket name from the environment variable
-  public static final String GCS_BUCKET = String.format("gs://%s",
+  /**
+   * This variable describes bucket name from the environment variable.
+   */
+  private static final String GCS_BUCKET = String.format("gs://%s",
       System.getenv("BUCKET_NAME"));
 
-  public static final String GCS_ERROR_BUCKET = String.format("%s/errors",
+  /**
+   * This variable describes error bucket name from the environment variable.
+   */
+  private static final String GCS_ERROR_BUCKET = String.format("%s/errors",
       GCS_BUCKET);
 
-  public static final String GCS_PRODUCTS_OBJECT = "products.json";
+  /**
+   * This variable describes json file name for import products.
+   */
+  private static final String GCS_PRODUCTS_OBJECT = "products.json";
 
   // TO CHECK ERROR HANDLING USE THE JSON WITH INVALID PRODUCT
   // GCS_PRODUCTS_OBJECT = "products_some_invalid.json"
 
-  // get product service client
-  private static ProductServiceClient getProductServiceClient()
-      throws IOException {
-    ProductServiceSettings productServiceSettings =
-        ProductServiceSettings.newBuilder()
-            .setEndpoint(ENDPOINT)
-            .build();
-    return ProductServiceClient.create(productServiceSettings);
+  private ImportProductsGcs() {
   }
 
-  // get import products from gcs request
-  private static ImportProductsRequest getImportProductsGcsRequest(
-      String gcsObjectName) {
+  /**
+   * Get product service client.
+   *
+   * @return ProductServiceClient.
+   * @throws IOException if endpoint is incorrect.
+   */
+  private static ProductServiceClient getProductServiceClient()
+      throws IOException {
+    return ProductServiceClient.create();
+  }
+
+  /**
+   * Get import products from gcs request.
+   *
+   * @param gcsObjectName file name for import.
+   * @return ImportProductsRequest.
+   */
+  public static ImportProductsRequest getImportProductsGcsRequest(
+      final String gcsObjectName) {
     GcsSource gcsSource = GcsSource.newBuilder()
         .addAllInputUris(Collections.singleton(
             String.format("%s/%s", GCS_BUCKET, gcsObjectName)))
@@ -102,7 +120,17 @@ public class ImportProductsGcs {
     return importRequest;
   }
 
-  // call the Retail API to import products
+  /**
+   * Call the Retail API to import products.
+   *
+   * @throws IOException          from the called method.
+   * @throws ExecutionException   when attempting to retrieve the result of a
+   *                              task that aborted by throwing an exception.
+   * @throws InterruptedException when a thread is waiting, sleeping, or
+   *                              otherwise occupied, and the thread is
+   *                              interrupted, either before or during the
+   *                              activity.
+   */
   public static void importProductsFromGcs()
       throws IOException, ExecutionException, InterruptedException {
     ImportProductsRequest importGcsRequest = getImportProductsGcsRequest(
@@ -118,17 +146,27 @@ public class ImportProductsGcs {
     while (!gcsOperation.isDone()) {
       System.out.println("Please wait till operation is done");
 
-      getProductServiceClient().awaitTermination(5, TimeUnit.SECONDS);
+      final int awaitDuration = 5;
+
+      getProductServiceClient().awaitTermination(awaitDuration,
+          TimeUnit.SECONDS);
 
       System.out.println("Import products operation is done.");
 
-      System.out.println(
-          "Number of successfully imported products: "
-              + gcsOperation.getMetadata().get()
-              .getSuccessCount());
-      System.out.println("Number of failures during the importing: "
-          + gcsOperation.getMetadata().get().getFailureCount());
-      System.out.println("Operation result: " + gcsOperation.get());
+      if (gcsOperation.getMetadata().get() != null) {
+        System.out.printf("Number of successfully imported products: %s%n",
+            gcsOperation.getMetadata().get().getSuccessCount());
+
+        System.out.printf("Number of failures during the importing: %s%n",
+            gcsOperation.getMetadata().get().getFailureCount());
+      } else {
+        System.out.println("Metadata in bigQuery operation is empty.");
+      }
+      if (gcsOperation.get() != null) {
+        System.out.printf("Operation result: %s%n", gcsOperation.get());
+      } else {
+        System.out.println("Operation result is empty.");
+      }
 
       // The imported products needs to be indexed in the catalog
       // before they become available for search.
@@ -138,10 +176,15 @@ public class ImportProductsGcs {
     }
   }
 
-  // [END retail_import_products_from_gcs]
-
-  public static void main(String[] args)
+  /**
+   * Executable tutorial class.
+   *
+   * @param args command line arguments.
+   */
+  public static void main(final String[] args)
       throws IOException, ExecutionException, InterruptedException {
     importProductsFromGcs();
   }
 }
+
+// [END retail_import_products_from_gcs]

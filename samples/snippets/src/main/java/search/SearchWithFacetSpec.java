@@ -25,31 +25,23 @@ import com.google.cloud.retail.v2.SearchRequest.FacetSpec;
 import com.google.cloud.retail.v2.SearchRequest.FacetSpec.FacetKey;
 import com.google.cloud.retail.v2.SearchResponse;
 import com.google.cloud.retail.v2.SearchServiceClient;
-import com.google.cloud.retail.v2.SearchServiceSettings;
 import java.io.IOException;
 import java.util.UUID;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public class SearchWithFacetSpec {
+public final class SearchWithFacetSpec {
 
   /**
    * This variable describes project number getting from environment variable.
    */
-  private static final String YOUR_PROJECT_NUMBER = System.getenv(
+  private static final String PROJECT_NUMBER = System.getenv(
       "PROJECT_NUMBER");
-
-  /**
-   * This variable describes endpoint for send requests.
-   */
-  private static final String ENDPOINT = "retail.googleapis.com:443";
 
   /**
    * This variable describes default catalog name.
    */
   private static final String DEFAULT_CATALOG_NAME =
       String.format("projects/%s/locations/global/catalogs/default_catalog",
-          YOUR_PROJECT_NUMBER);
+          PROJECT_NUMBER);
 
   /**
    * This variable describes default search placement name. Using for identify
@@ -63,6 +55,9 @@ public class SearchWithFacetSpec {
    */
   private static final String VISITOR_ID = UUID.randomUUID().toString();
 
+  private SearchWithFacetSpec() {
+  }
+
   /**
    * Get search service client.
    *
@@ -71,10 +66,7 @@ public class SearchWithFacetSpec {
    */
   private static SearchServiceClient getSearchServiceClient()
       throws IOException {
-    SearchServiceSettings settings = SearchServiceSettings.newBuilder()
-        .setEndpoint(ENDPOINT)
-        .build();
-    return SearchServiceClient.create(settings);
+    return SearchServiceClient.create();
   }
 
   /**
@@ -87,7 +79,7 @@ public class SearchWithFacetSpec {
   public static SearchRequest getSearchRequest(final String query,
       final String facetKeyParam) {
 
-    int pageSize = 10;
+    final int pageSize = 10;
 
     FacetKey facetKey = FacetKey.newBuilder()
         .setKey(facetKeyParam)
@@ -114,7 +106,7 @@ public class SearchWithFacetSpec {
    * Call the retail search.
    *
    * @return SearchResponse.
-   * @throws IOException if endpoint is not provided in getSearchServiceClient().
+   * @throws IOException if endpoint is not provided.
    */
   public static SearchResponse search() throws IOException {
     // TRY DIFFERENT CONDITIONS HERE:
@@ -133,6 +125,7 @@ public class SearchWithFacetSpec {
   /**
    * Executable tutorial class.
    *
+   * @param args command line arguments.
    * @throws IOException from the called method.
    */
   public static void main(final String[] args) throws IOException {

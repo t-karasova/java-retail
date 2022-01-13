@@ -24,34 +24,47 @@ package product;
 import com.google.cloud.retail.v2.GetProductRequest;
 import com.google.cloud.retail.v2.Product;
 import com.google.cloud.retail.v2.ProductServiceClient;
-import com.google.cloud.retail.v2.ProductServiceSettings;
 
 import java.io.IOException;
 import java.util.UUID;
 
-import static product.setup.SetupCleanup.createProduct;
-import static product.setup.SetupCleanup.deleteProduct;
+import static setup.SetupCleanup.createProduct;
+import static setup.SetupCleanup.deleteProduct;
 
-public class GetProduct {
+public final class GetProduct {
 
-  public static final String PROJECT_NUMBER = System.getenv("PROJECT_NUMBER");
+  /**
+   * This variable describes project number getting from environment variable.
+   */
+  private static final String PROJECT_NUMBER = System.getenv("PROJECT_NUMBER");
 
-  public static final String ENDPOINT = "retail.googleapis.com:443";
+  /**
+   * This variable describes generated product id for field setting.
+   */
+  private static final String GENERATED_PRODUCT_ID = UUID.randomUUID()
+      .toString();
 
-  private static final String PRODUCT_ID = UUID.randomUUID().toString();
-
-  // Get product service client
-  private static ProductServiceClient getProductServiceClient()
-      throws IOException {
-    ProductServiceSettings productServiceSettings =
-        ProductServiceSettings.newBuilder()
-            .setEndpoint(ENDPOINT)
-            .build();
-    return ProductServiceClient.create(productServiceSettings);
+  private GetProduct() {
   }
 
-  // Get product request
-  public static GetProductRequest getProductRequest(String productName) {
+  /**
+   * Get product service client.
+   *
+   * @return ProductServiceClient.
+   * @throws IOException if endpoint is incorrect.
+   */
+  private static ProductServiceClient getProductServiceClient()
+      throws IOException {
+    return ProductServiceClient.create();
+  }
+
+  /**
+   * Get product request.
+   *
+   * @param productName refers to product name.
+   * @return GetProductRequest.
+   */
+  public static GetProductRequest getProductRequest(final String productName) {
     GetProductRequest getProductRequest = GetProductRequest.newBuilder()
         .setName(productName)
         .build();
@@ -60,8 +73,15 @@ public class GetProduct {
     return getProductRequest;
   }
 
-  // Call the Retail API to get product
-  public static Product getProduct(String productName) throws IOException {
+  /**
+   * Call the Retail API to get product.
+   *
+   * @param productName refers to product name.
+   * @return Product.
+   * @throws IOException from the called method.
+   */
+  public static Product getProduct(final String productName)
+      throws IOException {
     GetProductRequest getRequest = getProductRequest(productName);
 
     Product getProductResponse = getProductServiceClient().getProduct(
@@ -72,13 +92,18 @@ public class GetProduct {
     return getProductResponse;
   }
 
-  // [END retail_get_product]
-
-  public static void main(String[] args) throws IOException {
-    Product createdProduct = createProduct(PRODUCT_ID);
+  /**
+   * Executable tutorial class.
+   *
+   * @param args command line arguments.
+   */
+  public static void main(final String[] args) throws IOException {
+    Product createdProduct = createProduct(GENERATED_PRODUCT_ID);
 
     Product product = getProduct(createdProduct.getName());
 
     deleteProduct(product.getName());
   }
 }
+
+// [END retail_get_product]

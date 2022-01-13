@@ -21,7 +21,6 @@
 package product;
 
 import com.google.cloud.retail.v2.ProductServiceClient;
-import com.google.cloud.retail.v2.ProductServiceSettings;
 import com.google.cloud.retail.v2.RemoveFulfillmentPlacesRequest;
 import com.google.protobuf.Timestamp;
 
@@ -29,46 +28,64 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
-import static product.setup.SetupCleanup.createProduct;
-import static product.setup.SetupCleanup.deleteProduct;
-import static product.setup.SetupCleanup.getProduct;
+import static setup.SetupCleanup.createProduct;
+import static setup.SetupCleanup.deleteProduct;
+import static setup.SetupCleanup.getProduct;
 
-public class RemoveFulfillmentPlaces {
+public final class RemoveFulfillmentPlaces {
 
-  public static final String PROJECT_NUMBER = System.getenv("PROJECT_NUMBER");
+  /**
+   * This variable describes project number getting from environment variable.
+   */
+  private static final String PROJECT_NUMBER = System.getenv("PROJECT_NUMBER");
 
-  public static final String ENDPOINT = "retail.googleapis.com:443";
+  /**
+   * This variable describes defined product id for field setting.
+   */
+  private static final String PRODUCT_ID = "remove_fulfillment_test_product_id";
 
-  public static final String PRODUCT_ID = "remove_fulfillment_test_product_id";
+  /**
+   * This variable describes product name.
+   */
+  private static final String PRODUCT_NAME = String.format(
+      "projects/%s/locations/global/catalogs/default_catalog/"
+          + "branches/default_branch/products/%s", PROJECT_NUMBER, PRODUCT_ID);
 
-  public static final String PRODUCT_NAME = String.format(
-      "projects/%s/locations/global/catalogs/default_catalog/branches/default_branch/products/%s",
-      PROJECT_NUMBER, PRODUCT_ID);
-
-  // The request timestamp
-  private static final Timestamp requestTime = Timestamp.newBuilder()
+  /**
+   * The request timestamp.
+   */
+  private static final Timestamp REQUEST_TIME = Timestamp.newBuilder()
       .setSeconds(Instant.now().getEpochSecond())
       .setNanos(Instant.now().getNano()).build();
 
-  // get product service client
-  private static ProductServiceClient getProductServiceClient()
-      throws IOException {
-    ProductServiceSettings productServiceSettings =
-        ProductServiceSettings.newBuilder()
-            .setEndpoint(ENDPOINT)
-            .build();
-    return ProductServiceClient.create(productServiceSettings);
+  private RemoveFulfillmentPlaces() {
   }
 
-  // remove fulfillment request
+  /**
+   * Get product service client.
+   *
+   * @return ProductServiceClient.
+   * @throws IOException if endpoint is incorrect.
+   */
+  private static ProductServiceClient getProductServiceClient()
+      throws IOException {
+    return ProductServiceClient.create();
+  }
+
+  /**
+   * Remove fulfillment request.
+   *
+   * @param productName refers to product name.
+   * @return RemoveFulfillmentPlacesRequest.
+   */
   public static RemoveFulfillmentPlacesRequest getRemoveFulfillmentRequest(
-      String productName) {
+      final String productName) {
     RemoveFulfillmentPlacesRequest removeFulfillmentRequest =
         RemoveFulfillmentPlacesRequest.newBuilder()
             .setProduct(productName)
             .setType("pickup-in-store")
             .addPlaceIds("store0")
-            .setRemoveTime(requestTime)
+            .setRemoveTime(REQUEST_TIME)
             .setAllowMissing(true)
             .build();
 
@@ -78,8 +95,14 @@ public class RemoveFulfillmentPlaces {
     return removeFulfillmentRequest;
   }
 
-  // remove fulfillment places to product
-  public static void removeFulfillmentPlaces(String productName)
+  /**
+   * Remove fulfillment places to product.
+   *
+   * @param productName refers to product name.
+   * @throws IOException          from the called method.
+   * @throws InterruptedException if interrupted while waiting.
+   */
+  public static void removeFulfillmentPlaces(final String productName)
       throws IOException, InterruptedException {
     RemoveFulfillmentPlacesRequest removeFulfillmentRequest =
         getRemoveFulfillmentRequest(productName);
@@ -93,16 +116,23 @@ public class RemoveFulfillmentPlaces {
     */
     System.out.println("Remove fulfillment places, wait 30 seconds.");
 
-    getProductServiceClient().awaitTermination(30, TimeUnit.SECONDS);
+    final int awaitDuration = 30;
+
+    getProductServiceClient().awaitTermination(awaitDuration, TimeUnit.SECONDS);
   }
 
-  // [END retail_remove_fulfillment_places]
-
-  public static void main(String[] args)
+  /**
+   * Executable tutorial class.
+   *
+   * @param args command line arguments.
+   */
+  public static void main(final String[] args)
       throws IOException, InterruptedException {
     createProduct(PRODUCT_ID);
 
-    getProductServiceClient().awaitTermination(30, TimeUnit.SECONDS);
+    final int awaitDuration = 30;
+
+    getProductServiceClient().awaitTermination(awaitDuration, TimeUnit.SECONDS);
 
     removeFulfillmentPlaces(PRODUCT_NAME);
 
@@ -111,3 +141,5 @@ public class RemoveFulfillmentPlaces {
     deleteProduct(PRODUCT_NAME);
   }
 }
+
+// [END retail_remove_fulfillment_places]

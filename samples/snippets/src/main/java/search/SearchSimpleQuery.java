@@ -25,24 +25,16 @@ package search;
 import com.google.cloud.retail.v2.SearchRequest;
 import com.google.cloud.retail.v2.SearchResponse;
 import com.google.cloud.retail.v2.SearchServiceClient;
-import com.google.cloud.retail.v2.SearchServiceSettings;
 import java.io.IOException;
 import java.util.UUID;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public class SearchSimpleQuery {
+public final class SearchSimpleQuery {
 
   /**
    * This variable describes project number getting from environment variable.
    */
   private static final String YOUR_PROJECT_NUMBER = System.getenv(
       "PROJECT_NUMBER");
-
-  /**
-   * This variable describes endpoint for send requests.
-   */
-  private static final String ENDPOINT = "retail.googleapis.com:443";
 
   /**
    * This variable describes default catalog name.
@@ -63,6 +55,9 @@ public class SearchSimpleQuery {
    */
   private static final String VISITOR_ID = UUID.randomUUID().toString();
 
+  private SearchSimpleQuery() {
+  }
+
   /**
    * Get search service client.
    *
@@ -71,10 +66,7 @@ public class SearchSimpleQuery {
    */
   private static SearchServiceClient getSearchServiceClient()
       throws IOException {
-    SearchServiceSettings settings = SearchServiceSettings.newBuilder()
-        .setEndpoint(ENDPOINT)
-        .build();
-    return SearchServiceClient.create(settings);
+    return SearchServiceClient.create();
   }
 
   /**
@@ -84,7 +76,7 @@ public class SearchSimpleQuery {
    * @return SearchRequest.
    */
   public static SearchRequest getSearchRequest(final String query) {
-    int pageSize = 10;
+    final int pageSize = 10;
 
     SearchRequest searchRequest = SearchRequest.newBuilder()
         .setPlacement(DEFAULT_SEARCH_PLACEMENT_NAME)
@@ -102,7 +94,7 @@ public class SearchSimpleQuery {
    * Call the retail search.
    *
    * @return SearchResponse.
-   * @throws IOException if endpoint is not provided in getSearchServiceClient().
+   * @throws IOException if endpoint is not provided.
    */
   public static SearchResponse search() throws IOException {
     // TRY DIFFERENT QUERY PHRASES HERE:
@@ -122,6 +114,7 @@ public class SearchSimpleQuery {
   /**
    * Executable tutorial class.
    *
+   * @param args command line arguments.
    * @throws IOException from the called method.
    */
   public static void main(final String[] args) throws IOException {
