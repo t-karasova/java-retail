@@ -233,6 +233,26 @@ public final class SetupCleanup {
   }
 
   /**
+   * Try to delete product if exists.
+   *
+   * @param productName name of product to delete.
+   */
+  public static void tryToDeleteProductIfExists(final String productName) {
+
+    GetProductRequest getProductRequest = GetProductRequest.newBuilder()
+        .setName(productName)
+        .build();
+
+    try {
+      Product product = getProductServiceClient().getProduct(getProductRequest);
+
+      getProductServiceClient().deleteProduct(product.getName());
+    } catch (NotFoundException | IOException e) {
+      System.out.printf("Product %s is not found.%n", productName);
+    }
+  }
+
+  /**
    * Get user event.
    *
    * @param visitorId visitor id.
@@ -459,7 +479,7 @@ public final class SetupCleanup {
    * List of BQ tables.
    *
    * @param datasetName name of dataset.
-   * @return Page<!--Table-->
+   * @return Page<! - - Table-->
    */
   public static Page<Table> listBqTables(final String datasetName) {
     Page<Table> tables = null;

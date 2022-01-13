@@ -21,6 +21,8 @@
 
 package product;
 
+import static setup.SetupCleanup.tryToDeleteProductIfExists;
+
 import com.google.cloud.retail.v2.CreateProductRequest;
 import com.google.cloud.retail.v2.DeleteProductRequest;
 import com.google.cloud.retail.v2.GetProductRequest;
@@ -222,6 +224,8 @@ public final class CrudProduct {
    * @param args command line arguments.
    */
   public static void main(final String[] args) throws IOException {
+    tryToDeleteProductIfExists(PRODUCT_NAME);
+
     createProduct();
 
     getProduct();
