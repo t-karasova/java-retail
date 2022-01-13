@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 import static setup.SetupCleanup.createProduct;
 import static setup.SetupCleanup.deleteProduct;
 import static setup.SetupCleanup.getProduct;
+import static setup.SetupCleanup.tryToDeleteProductIfExists;
 
 public final class SetInventory {
 
@@ -165,6 +166,8 @@ public final class SetInventory {
    */
   public static void main(final String[] args)
       throws IOException, InterruptedException {
+    tryToDeleteProductIfExists(PRODUCT_NAME);
+
     createProduct(PRODUCT_ID);
 
     setInventory(PRODUCT_NAME);
