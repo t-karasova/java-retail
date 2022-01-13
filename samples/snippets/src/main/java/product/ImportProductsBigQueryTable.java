@@ -155,13 +155,20 @@ public final class ImportProductsBigQueryTable {
 
       System.out.println("Import products operation is done.");
 
-      System.out.printf("Number of successfully imported products: %s%n",
-          bigQueryOperation.getMetadata().get().getSuccessCount());
+      if (bigQueryOperation.getMetadata().get() != null) {
+        System.out.printf("Number of successfully imported products: %s%n",
+            bigQueryOperation.getMetadata().get().getSuccessCount());
 
-      System.out.printf("Number of failures during the importing: %s%n",
-          bigQueryOperation.getMetadata().get().getFailureCount());
-
-      System.out.printf("Operation result: %s%n", bigQueryOperation.get());
+        System.out.printf("Number of failures during the importing: %s%n",
+            bigQueryOperation.getMetadata().get().getFailureCount());
+      } else {
+        System.out.println("Metadata in bigQuery operation is empty.");
+      }
+      if (bigQueryOperation.get() != null) {
+        System.out.printf("Operation result: %s%n", bigQueryOperation.get());
+      } else {
+        System.out.println("Operation result is empty.");
+      }
     }
   }
 

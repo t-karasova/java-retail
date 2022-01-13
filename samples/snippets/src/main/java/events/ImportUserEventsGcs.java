@@ -152,13 +152,20 @@ public final class ImportUserEventsGcs {
 
       System.out.println("Import user events operation is done.");
 
-      System.out.printf("Number of successfully imported events: %s%n",
-          gcsOperation.getMetadata().get().getSuccessCount());
+      if (gcsOperation.getMetadata().get() != null) {
+        System.out.printf("Number of successfully imported events: %s%n",
+            gcsOperation.getMetadata().get().getSuccessCount());
 
-      System.out.printf("Number of failures during the importing: %s%n",
-          gcsOperation.getMetadata().get().getFailureCount());
-
-      System.out.printf("Operation result: %s%n", gcsOperation.get());
+        System.out.printf("Number of failures during the importing: %s%n",
+            gcsOperation.getMetadata().get().getFailureCount());
+      } else {
+        System.out.println("Metadata in bigQuery operation is empty.");
+      }
+      if (gcsOperation.get() != null) {
+        System.out.printf("Operation result: %s%n", gcsOperation.get());
+      } else {
+        System.out.println("Operation result is empty.");
+      }
     }
   }
 

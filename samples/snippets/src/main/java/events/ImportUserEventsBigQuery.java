@@ -151,13 +151,20 @@ public final class ImportUserEventsBigQuery {
 
       System.out.println("Import user events operation is done.");
 
-      System.out.printf("Number of successfully imported events: %s%n",
-          bigQueryOperation.getMetadata().get().getSuccessCount());
+      if (bigQueryOperation.getMetadata().get() != null) {
+        System.out.printf("Number of successfully imported events: %s%n",
+            bigQueryOperation.getMetadata().get().getSuccessCount());
 
-      System.out.printf("Number of failures during the importing: %s%n",
-          bigQueryOperation.getMetadata().get().getFailureCount());
-
-      System.out.printf("Operation result: %s%n", bigQueryOperation.get());
+        System.out.printf("Number of failures during the importing: %s%n",
+            bigQueryOperation.getMetadata().get().getFailureCount());
+      } else {
+        System.out.println("Metadata in bigQuery operation is empty.");
+      }
+      if (bigQueryOperation.get() != null) {
+        System.out.printf("Operation result: %s%n", bigQueryOperation.get());
+      } else {
+        System.out.println("Operation result is empty.");
+      }
     }
   }
 

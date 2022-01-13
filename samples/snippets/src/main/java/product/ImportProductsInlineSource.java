@@ -237,13 +237,20 @@ public final class ImportProductsInlineSource {
 
       System.out.println("Import products operation is done.");
 
-      System.out.printf("Number of successfully imported products: %s%n",
-          importOperation.getMetadata().get().getSuccessCount());
+      if (importOperation.getMetadata().get() != null) {
+        System.out.printf("Number of successfully imported products: %s%n",
+            importOperation.getMetadata().get().getSuccessCount());
 
-      System.out.printf("Number of failures during the importing: %s%n",
-          importOperation.getMetadata().get().getFailureCount());
-
-      System.out.printf("Operation result: %s%n", importOperation.get());
+        System.out.printf("Number of failures during the importing: %s%n",
+            importOperation.getMetadata().get().getFailureCount());
+      } else {
+        System.out.println("Metadata in bigQuery operation is empty.");
+      }
+      if (importOperation.get() != null) {
+        System.out.printf("Operation result: %s%n", importOperation.get());
+      } else {
+        System.out.println("Operation result is empty.");
+      }
     }
   }
 

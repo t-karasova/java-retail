@@ -153,13 +153,20 @@ public final class ImportProductsGcs {
 
       System.out.println("Import products operation is done.");
 
-      System.out.println(
-          "Number of successfully imported products: "
-              + gcsOperation.getMetadata().get()
-              .getSuccessCount());
-      System.out.println("Number of failures during the importing: "
-          + gcsOperation.getMetadata().get().getFailureCount());
-      System.out.println("Operation result: " + gcsOperation.get());
+      if (gcsOperation.getMetadata().get() != null) {
+        System.out.printf("Number of successfully imported products: %s%n",
+            gcsOperation.getMetadata().get().getSuccessCount());
+
+        System.out.printf("Number of failures during the importing: %s%n",
+            gcsOperation.getMetadata().get().getFailureCount());
+      } else {
+        System.out.println("Metadata in bigQuery operation is empty.");
+      }
+      if (gcsOperation.get() != null) {
+        System.out.printf("Operation result: %s%n", gcsOperation.get());
+      } else {
+        System.out.println("Operation result is empty.");
+      }
 
       // The imported products needs to be indexed in the catalog
       // before they become available for search.
