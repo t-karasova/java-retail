@@ -16,15 +16,13 @@
 
 package events.setup;
 
-import lombok.Getter;
+import static setup.SetupCleanup.createBucket;
+import static setup.SetupCleanup.uploadObject;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-
-import static setup.SetupCleanup.createBucket;
-import static setup.SetupCleanup.uploadObject;
 
 public final class EventsCreateGcsBucket {
 
@@ -47,11 +45,19 @@ public final class EventsCreateGcsBucket {
   /**
    * This variable describes bucket name in a certain format.
    */
-  @Getter
   private static final String BUCKET_NAME = String.format("%s_events_%s",
       PROJECT_ID, DATE_FORMAT.format(TIMESTAMP));
 
   private EventsCreateGcsBucket() {
+  }
+
+  /**
+   * Getter for bucket name constant variable.
+   *
+   * @return String.
+   */
+  public static String getBucketName() {
+    return BUCKET_NAME;
   }
 
   /**

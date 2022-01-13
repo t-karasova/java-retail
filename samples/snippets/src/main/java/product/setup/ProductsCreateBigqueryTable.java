@@ -81,11 +81,11 @@ public final class ProductsCreateBigqueryTable {
 
     String validProductsSourceFile = String.format(
         "gs://%s/products.json",
-        ProductsCreateGcsBucket.getBUCKET_NAME());
+        ProductsCreateGcsBucket.getBucketName());
 
     String invalidProductsSourceFile = String.format(
         "gs://%s/products_some_invalid.json",
-        ProductsCreateGcsBucket.getBUCKET_NAME());
+        ProductsCreateGcsBucket.getBucketName());
 
     BufferedReader bufferedReader = new BufferedReader(
         new FileReader(productSchemaFilePath));

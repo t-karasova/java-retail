@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import lombok.Getter;
 
 public final class ProductsCreateGcsBucket {
 
@@ -46,11 +45,19 @@ public final class ProductsCreateGcsBucket {
   /**
    * This variable describes bucket name in a certain format.
    */
-  @Getter
   private static final String BUCKET_NAME = String.format("%s_products_%s",
       PROJECT_ID, DATE_FORMAT.format(TIMESTAMP));
 
   private ProductsCreateGcsBucket() {
+  }
+
+  /**
+   * Getter for bucket name constant variable.
+   *
+   * @return String.
+   */
+  public static String getBucketName() {
+    return BUCKET_NAME;
   }
 
   /**
