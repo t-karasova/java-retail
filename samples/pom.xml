@@ -3,7 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.cloud</groupId>
   <artifactId>google-cloud-retail-samples</artifactId>
-  <version>0.0.1-SNAPSHOT</version><!-- This artifact should not be released -->
+  <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-retail</artifactId>
+    </dependency>
+  </dependencies><!-- This artifact should not be released -->
   <packaging>pom</packaging>
   <name>Google Cloud Retail Samples Parent</name>
   <url>https://github.com/googleapis/java-retail</url>
@@ -30,7 +36,7 @@
   <modules>
     <module>install-without-bom</module>
     <module>snapshot</module>
-    <module>snippets</module>
+    <module>interactive-tutorials</module>
   </modules>
 
   <build>
