@@ -152,7 +152,7 @@ Adding one more word to the query phrase makes your request more accurate. You c
 In case of sending some invalid data or if any of the required fields is missing in the request, the Search Service responds with an error message.
 To find a complete list of the Search Request fields with their corresponding requirements, check the [Search Service references](https://cloud.google.com/retail/docs/reference/rpc/google.cloud.retail.v2#searchservice)
 
-In this tutorial, you will get an error message when trying to request the Search Service without setting the `visitorId`, which is a required field.
+In this tutorial, you will get an error message when trying to request the Search Service without setting the `visitor_id`, which is a required field.
 
 1. To check it, comment out a <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchSimpleQuery.java" regex="123456">line</walkthrough-editor-select-regex>: `search_request.visitor_id = "123456"`.
 
@@ -164,7 +164,7 @@ In this tutorial, you will get an error message when trying to request the Searc
 1. You should see the following error message:
 
     ```terminal
-    google.api_core.exceptions.InvalidArgument: 400 Field "visitorId" is a required field, but no value is found.
+    google.api_core.exceptions.InvalidArgument: 400 Field "visitor_id" is a required field, but no value is found.
     ```
 
 ## Congratulations

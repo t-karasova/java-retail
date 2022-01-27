@@ -111,7 +111,7 @@ To use the ordering feature, you need to specify the field and the ordering dire
 
 1. Order the search results by price when more expensive items come first. To do that, set the ordering expression as follows:
 
-   ```order = 'price desc'```
+   ```order = "price desc"```
 
 
 1. Run the sample in the Terminal using the following command:
@@ -127,7 +127,7 @@ Next, change the ordering direction to show the cheapest products first.
 
 1. Change the condition under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithOrdering.java" regex="TRY DIFFERENT ORDERING EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> to the following:
 
-   ```order = 'price asc'``` or just ```order = 'price'```
+   ```order = "price asc"``` or just ```order = "price"```
    Those are equivalent expressions because ascending is the default ordering direction.
 
 1. Run the sample in the Terminal using the command:
@@ -148,13 +148,13 @@ For example, **```price desc, discount desc```** orders items by their price fir
 
 1. To try that, change the ordering expression to the next one under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithOrdering.java" regex="TRY DIFFERENT ORDERING EXPRESSIONS HERE">comment</walkthrough-editor-select-regex>:
     ```
-    order = 'price desc, discount'
+    order = "price desc, discount"
     ```
 
    or
 
     ```
-    order = 'brands, attributes.collection desc'
+    order = "brands, attributes.collection desc"
     ```
 
 1. Run the code sample in the Terminal using the command:
@@ -172,7 +172,7 @@ To check a list of ordering fields, use the [Retail API documentation](https://c
 If you try to order the search results by the field that is not intended for ordering (for example, the `name` field), you will get an error message.
 
 1. Change the variable `order` value under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithOrdering.java" regex="TRY DIFFERENT ORDERING EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> to the following:
-   ```order = 'name desc'```
+   ```order = "name desc"```
 
 1. Run the code again:
     ```bash

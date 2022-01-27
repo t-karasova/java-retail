@@ -163,7 +163,7 @@ facets {
 
 1. Next, change the value of the field **facet_key** and run the code sample again:
 
-```facet_key = "brands"```
+```facetKey = "brands"```
 
 1. Now you can check the results. The **facets** object now contains barnds:
 ```
@@ -202,7 +202,7 @@ values for each faceting field.
 
 Let's modify the ```SearchRequest``` to get price facet with two price intervals: $(0 - 20.0] and $(21.0 - 50]
 
-Define the Interval in the **```get_search_request()```**, add the following code:
+Define the Interval in the **```getSearchRequest()```**, add the following code:
 ```
     interval1 = Interval()
     interval1.minimum = 0.0
@@ -220,7 +220,7 @@ facet_key.intervals = [interval1, interval2]
 
 Next, change the ```facet_key``` value in the ```search()``` function:
 ```
-facet_key = "price"
+facetKey = "price"
 ```
 
 ## Getting numerical facets. Result analyse

@@ -117,7 +117,7 @@ You can write a simple expression that applies to the text field and looks like 
 Function `ANY` returns true if the field contains any literals.
 
 An example of such an expression is
-```'(colorFamily: ANY("Black"))'```
+```"(colorFamilies: ANY("Black"))"```
 
 1. To see the whole request with the filtering applied, open
    <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">SearchWithFiltering.java</walkthrough-editor-select-regex>.
@@ -135,12 +135,12 @@ Now you can try filtering by a text field yourself in the Cloud Shell environmen
 
 1. To do that, replace the condition under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> with one of the following samples:
     ```
-    filter = '(brands: ANY("YouTube"))'
+    filter = "(brands: ANY("YouTube"))"
     ```
 
    or
     ```
-    filter = '(colorFamily: ANY("White","Gray"))'
+    filter = "(colorFamilies: ANY("White","Gray"))"
     ```
 2. Run the following command in Terminal:
     ```bash
@@ -159,7 +159,7 @@ To filter by a numeric field, you can write the filtering expression in two ways
 
 
     ```
-    filter = 'price: IN(15.0, 45.0)'
+    filter = "price: IN(15.0, 45.0)"
     ```
 
 1. Run the following command in Terminal:
@@ -177,7 +177,7 @@ All comparison operators (`<=`,  `<`,  `>=`, `>` and `=`) are available for filt
 
 1. Change the filter expression under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> to the following:
     ```
-    filter = 'price >= 15.0 AND price < 45.0'
+    filter = "price >= 15.0 AND price < 45.0"
     ```
 
 1. Run the following command in Terminal:
@@ -195,7 +195,7 @@ To filter the search results by multiple fields, you can combine the expressions
 
 1. Change the filter expression under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> to the following:
     ```
-    filter = '(categories: ANY("Apparel")) AND (price: IN(30.0, *))'
+    filter = "(categories: ANY("Apparel")) AND (price: IN(30.0, *))"
     ```
 
 2. Run the following command in Terminal:
@@ -218,7 +218,7 @@ If you try to filter the search results by a field that is not intended for filt
 1. Change the variable `filter` value under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> to the following:
 
     ```
-    filter = '(name: ANY("some_random"))'
+    filter = "(name: ANY("some_random"))"
     ```
 
 2. Run the following command in Terminal:

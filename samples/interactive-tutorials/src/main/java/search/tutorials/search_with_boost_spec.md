@@ -123,17 +123,14 @@ The boosting specification looks like this:
   condition_boost_specs {
          condition: string
          boost: double [-1;1]
-    }
+  }
 ```
 
 1. To set the **```condition```**, you should use a filtering expression like the following:
 
-   ```'(colorFamily: ANY("blue"))'```
+   ```"(colorFamilies: ANY("Blue"))"``` or ```"(rating: IN(4.0, 5.0))"```
 
-   or
-   ```'(rating: IN(4.0, 5.0))'```
-
-    <!-- TODO(ianan): change Filtering Tutorial link -->
+<!-- TODO(ianan): change Filtering Tutorial link -->
    You can learn how to use filters in the [Filtering Tutorial](retail_api_v2_filtering_python.md)
    or read about it in the [Retail API documentation](https://cloud.google.com/retail/docs/filter-and-order#filter)
 
@@ -177,12 +174,13 @@ Feel free to test product boosting yourself right now in the Cloud Shell environ
 Replace the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithBoostSpec.java" regex="condition = '.*'">condition</walkthrough-editor-select-regex> expression with something like this:
 
 ```
-condition = '(categories: ANY("Office"))'
+condition = "(categories: ANY("Office"))"
 ```
 
 Or
+
 ```
-condition = '(attributes.material: ANY("Cotton", "Polyester")) AND (brands: ANY("Google"))'
+condition = "(attributes.material: ANY("Cotton", "Polyester")) AND (brands: ANY("Google"))"
 ```
 
 At the same time, you can test the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithBoostSpec.java" regex="boost = (\D)?\d.*">boost strength</walkthrough-editor-select-regex> by setting any value from -1 to 1.
@@ -199,7 +197,7 @@ To check the list of text and numeric fields that support boosting, use the [Ret
 If you try to boost the search results and set a condition in the field that is not supported for boosting (for example, the **name** field), you will get an error message.
 
 1. Change the variable <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithBoostSpec.java" regex="condition = '.*'">condition</walkthrough-editor-select-regex> value to the following:
-   ``` condition = '(name: ANY("some_random"))'```
+   ``` condition = "(name: ANY("some_random"))"```
 
 1. Run the code again:
     ```bash
