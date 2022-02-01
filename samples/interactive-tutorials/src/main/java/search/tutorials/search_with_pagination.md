@@ -40,7 +40,7 @@ After the project is created, set your PROJECT_ID to a ```project``` variable.
     gcloud config set project <YOUR_PROJECT_ID>
     ```
 
-1. Check that the Retail API is enabled for your Project in the [Admin Console](https://console.cloud.google.com/ai/retail/).
+2. Check that the Retail API is enabled for your Project in the [Admin Console](https://console.cloud.google.com/ai/retail/).
 
 ### Set up authentication
 
@@ -51,11 +51,11 @@ To run a code sample from the Cloud Shell, you need to be authenticated using th
     gcloud auth login
     ```
 
-1. Type `Y` and press **Enter**. Click the link in Terminal. A browser window should appear asking you to log in using your Gmail account.
+2. Type `Y` and press **Enter**. Click the link in Terminal. A browser window should appear asking you to log in using your Gmail account.
 
-1. Provide the Google Auth Library with access to your credentials and paste the code from the browser to the Terminal.
+3. Provide the Google Auth Library with access to your credentials and paste the code from the browser to the Terminal.
 
-1. Upload your service account key JSON file and use it to activate the service account:
+4. Upload your service account key JSON file and use it to activate the service account:
 
     ```bash
     gcloud iam service-accounts keys create ~/key.json --iam-account <YOUR_SERVICE_ACCOUNT_EMAIL>
@@ -65,7 +65,7 @@ To run a code sample from the Cloud Shell, you need to be authenticated using th
     gcloud auth activate-service-account --key-file  ~/key.json
     ```
 
-1. Set key as the GOOGLE_APPLICATION_CREDENTIALS environment variable to be used for requesting the Retail API:
+5. Set key as the GOOGLE_APPLICATION_CREDENTIALS environment variable to be used for requesting the Retail API:
     ```bash
     export GOOGLE_APPLICATION_CREDENTIALS=~/key.json
     ```
@@ -78,7 +78,7 @@ Because you are going to run the code samples in your own Google Cloud project, 
 
 1. You can find the ```project_number``` in the Project Info card displayed on **Home/Dashboard**.
 
-1. Set the environment variable with the following command:
+2. Set the environment variable with the following command:
     ```bash
     export PROJECT_NUMBER=<YOUR_PROJECT_NUMBER>
     ```
@@ -112,7 +112,7 @@ The code samples for each of the Retail services are stored in different directo
 
 The ```page_size``` request field lets you limit the number of items in the search response.
 
-1. To view the request with ```page_size```, open <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithPagination.java" regex="TRY DIFFERENT PAGINATION PARAMETERS HERE">SearchWithPagination.java</walkthrough-editor-select-regex>.
+1. To view the request with ```pageSize```, open <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithPagination.java" regex="TRY DIFFERENT PAGINATION PARAMETERS HERE">SearchWithPagination.java</walkthrough-editor-select-regex>.
 
 2. Run the sample in a terminal using the command:
 
@@ -130,34 +130,33 @@ After you have received a response in the previous step, you can request the nex
 
 You need to receive the ```next_page_token```, set it to a request field ```page_token```, and call the Search service again.
 
-1. Find the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithPagination.java" regex="PASTE CALL WITH NEXT PAGE TOKEN HERE">comment</walkthrough-editor-select-regex> and paste this piece of code:
+1. Find the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithPagination.java" regex="PASTE CALL WITH NEXT PAGE TOKEN HERE">comment</walkthrough-editor-select-regex> and paste this piece of code:
 
     ```
-        next_page_token = search_response_first_page.next_page_token
-        search_request_next_page = get_search_request("Hoodie", page_size, offset, next_page_token)
-        search_response_next_page = get_search_service_client().search(search_request_next_page)
+    String nextPageToken = searchResponseFirstPage.getNextPageToken();
+    SearchRequest searchRequestNextPage = getSearchRequest("Hoodie", pageSize, offset, nextPageToken);
+    SearchResponse searchResponseNextPage = getSearchServiceClient().search(searchRequestNextPage).getPage().getResponse();
 
-        print("---next page search results---")
-        print(search_response_next_page)
+    System.out.printf("Next page search results: %s", searchResponseNextPage);
     ```
 
-1. Run the code sample again:
+2. Run the code sample again:
     ```bash
     mvn compile exec:java -Dexec.mainClass="search.SearchWithPagination"
     ```
 
 You can see the next page of <page_size> products in the response.
 
-The field **```next_page_token```** has a value that forwards you to the next page. You can use this field in further results navigation.
+The field **```nextPageToken```** has a value that forwards you to the next page. You can use this field in further results navigation.
 
 ## Offset
 
 In other cases, instead of navigating from page to page or getting results with top relevance, you can directly jump to a particular position using the offset.
 
-You have requested the second page with 6 products per page using ```next_page_token``` in the previous step .
+You have requested the second page with 6 products per page using ```nextPageToken``` in the previous step .
 
-1. To reproduce the same effect using <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithPagination.java" regex="offset = \d">offset</walkthrough-editor-select-regex>, configure the field ```page_size``` with the same value, which is 6.
-1. Perform a small calculation to get the offset value:
+1. To reproduce the same effect using <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithPagination.java" regex="offset = \d">offset</walkthrough-editor-select-regex>, configure the field ```pageSize``` with the same value, which is 6.
+2. Perform a small calculation to get the offset value:
 
    `offset = 6 * (2 - 1) = 6`
 
@@ -165,26 +164,24 @@ You have requested the second page with 6 products per page using ```next_page_t
 
 ## Offset use case
 
-1. Find the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithPagination.java" regex="PASTE CALL WITH OFFSET HERE">comment</walkthrough-editor-select-regex> and paste this piece of code:
+1. Find the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithPagination.java" regex="PASTE CALL WITH OFFSET HERE">comment</walkthrough-editor-select-regex> and paste this piece of code:
     ```
-        offset = 6
-        search_request_second_page = get_search_request("Hoodie", page_size, offset, page_token)
-        search_response_second_page = get_search_service_client().search(search_request_second_page)
+    SearchRequest searchRequestSecondPage = getSearchRequest("Hoodie", pageSize, offset, pageToken);
+    SearchResponse searchResponseSecondPage = getSearchServiceClient().search(searchRequestSecondPage).getPage().getResponse();
 
-        print("---second page search results---")
-        print(search_response_second_page)
+    System.out.printf("Second page search results: %s", searchResponseSecondPage);
     ```
 
-1. Run the code sample again:
+2. Run the code sample again:
     ```bash
     mvn compile exec:java -Dexec.mainClass="search.SearchWithPagination"
     ```
 
-1. Take a look at both `next page search results` and `second page search results`. You can compare the lists of received products using both the `next_page_token` and `offset`, which should be equal.
+3. Take a look at both `next page search results` and `second page search results`. You can compare the lists of received products using both the `next_page_token` and `offset`, which should be equal.
 
 Now you know how the offset works. Perform the calculation one more time to make it clear.
 
-1. If you want to jump to the seventh page with a page size of 12, the offset value you need to set should be calculated this way:
+4. If you want to jump to the seventh page with a page size of 12, the offset value you need to set should be calculated this way:
 
    `offset = 12 * (7 - 1) = 72`
 
@@ -195,15 +192,15 @@ To find a complete list of the Search Request fields with their corresponding re
 
 If you try to request the Search Service with a negative page size, you get an error message.
 
-1. Change the value of the variable ```page_size``` to any negative value and run the code one more time.
+1. Change the value of the variable ```pageSize``` to any negative value and run the code one more time.
     ```bash
     mvn compile exec:java -Dexec.mainClass="search.SearchWithPagination"
     ```
 
-1. You should see the following error message:
+2. You should see the following error message:
 
     ```terminal
-    google.api_core.exceptions.InvalidArgument: 400 `page_size` must be nonnegative, but is set to -6.
+    com.google.api.gax.rpc.InvalidArgumentException: io.grpc.StatusRuntimeException: INVALID_ARGUMENT: `page_size` must be nonnegative, but is set to -6.
     ```
 
 ## Congratulations

@@ -32,7 +32,7 @@ After the project is created, set your PROJECT_ID to a ```project``` variable.
     gcloud config set project <YOUR_PROJECT_ID>
     ```
 
-1. Check that the Retail API is enabled for your Project in the [Admin Console](https://console.cloud.google.com/ai/retail/).
+2. Check that the Retail API is enabled for your Project in the [Admin Console](https://console.cloud.google.com/ai/retail/).
 
 ### Set up authentication
 
@@ -43,11 +43,11 @@ To run a code sample from the Cloud Shell, you need to be authenticated using th
     gcloud auth login
     ```
 
-1. Type `Y` and press **Enter**. Click the link in Terminal. A browser window should appear asking you to log in using your Gmail account.
+2. Type `Y` and press **Enter**. Click the link in Terminal. A browser window should appear asking you to log in using your Gmail account.
 
-1. Provide the Google Auth Library with access to your credentials and paste the code from the browser to the Terminal.
+3. Provide the Google Auth Library with access to your credentials and paste the code from the browser to the Terminal.
 
-1. Upload your service account key JSON file and use it to activate the service account:
+4. Upload your service account key JSON file and use it to activate the service account:
 
     ```bash
     gcloud iam service-accounts keys create ~/key.json --iam-account <YOUR_SERVICE_ACCOUNT_EMAIL>
@@ -57,7 +57,7 @@ To run a code sample from the Cloud Shell, you need to be authenticated using th
     gcloud auth activate-service-account --key-file  ~/key.json
     ```
 
-1. Set key as the GOOGLE_APPLICATION_CREDENTIALS environment variable to be used for requesting the Retail API:
+5. Set key as the GOOGLE_APPLICATION_CREDENTIALS environment variable to be used for requesting the Retail API:
     ```bash
     export GOOGLE_APPLICATION_CREDENTIALS=~/key.json
     ```
@@ -68,9 +68,9 @@ To run a code sample from the Cloud Shell, you need to be authenticated using th
 
 Because you are going to run the code samples in your own Google Cloud project, you should specify the **project_number** as an environment variable. It will be used in every request to the Retail API.
 
-1. You can find the ```project_number``` in the Project Info card displayed on **Home/Dashboard**.
+1. You can find the ```Project number``` in the Project Info card displayed on **Home/Dashboard**.
 
-1. Set the environment variable with the following command:
+2. Set the environment variable with the following command:
     ```bash
     export PROJECT_NUMBER=<YOUR_PROJECT_NUMBER>
     ```
@@ -103,14 +103,14 @@ The code samples for each of the Retail services are stored in different directo
 ## Simple query request
 
 The simple search request contains only the following required fields:
-- `placement`—a resource name of the search engine placement.
-- `visitor_id`—a unique identifier to track visitors.
-- `query`—a raw search query or search phrase.
+- `placement` — a resource name of the search engine placement.
+- `visitor_id` — a unique identifier to track visitors.
+- `query` — a raw search query or search phrase.
 
 To check the results right away, you need to run a request on a products catalog.
 
 1. Open
-   <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchSimpleQuery.java" regex="TRY DIFFERENT QUERY PHRASES HERE">SearchSimpleQuery.java</walkthrough-editor-select-regex> to review the request.
+   <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchSimpleQuery.java" regex="TRY DIFFERENT QUERY PHRASES HERE">SearchSimpleQuery.java</walkthrough-editor-select-regex> to review the request.
 
 2. To request the search service with a `Hoodie` query, run the following command in Terminal:
     ```bash
@@ -129,15 +129,15 @@ To check the results right away, you need to run a request on a products catalog
 
 Next, try to experiment with the query phrases.
 
-1. Find the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchSimpleQuery.java" regex="TRY DIFFERENT QUERY PHRASES HERE">condition</walkthrough-editor-select-regex> and replace the value of `query_phrase` with the following samples:
+1. Find the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchSimpleQuery.java" regex="TRY DIFFERENT QUERY PHRASES HERE">condition</walkthrough-editor-select-regex> and replace the value of `query_phrase` with the following samples:
 
     ```
-    query_phrase = "Zip Hoodie"
+    queryPhrase = "Zip Hoodie"
     ```
 
    and
     ```
-    query_phrase = "Unisex Zip Hoodie"
+    queryPhrase = "Unisex Zip Hoodie"
     ```
 
 2. Run the following command in Terminal:
@@ -152,19 +152,19 @@ Adding one more word to the query phrase makes your request more accurate. You c
 In case of sending some invalid data or if any of the required fields is missing in the request, the Search Service responds with an error message.
 To find a complete list of the Search Request fields with their corresponding requirements, check the [Search Service references](https://cloud.google.com/retail/docs/reference/rpc/google.cloud.retail.v2#searchservice)
 
-In this tutorial, you will get an error message when trying to request the Search Service without setting the `visitor_id`, which is a required field.
+In this tutorial, you will get an error message when trying to request the Search Service without setting the `VISITOR_ID`, which is a required field.
 
-1. To check it, comment out a <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchSimpleQuery.java" regex="123456">line</walkthrough-editor-select-regex>: `search_request.visitor_id = "123456"`.
+1. To check it, comment out a <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchSimpleQuery.java" regex="123456">line</walkthrough-editor-select-regex>: `setVisitorId(VISITOR_ID)`.
 
-1. Run the following command in Terminal:
+2. Run the following command in Terminal:
     ```bash
     mvn compile exec:java -Dexec.mainClass="search.SearchSimpleQuery"
     ```
 
-1. You should see the following error message:
+3. You should see the following error message:
 
     ```terminal
-    google.api_core.exceptions.InvalidArgument: 400 Field "visitor_id" is a required field, but no value is found.
+    com.google.api.gax.rpc.InvalidArgumentException: io.grpc.StatusRuntimeException: INVALID_ARGUMENT: google.api_core.exceptions.InvalidArgument: 400 Field "visitor_id" is a required field, but no value is found.
     ```
 
 ## Congratulations

@@ -39,7 +39,7 @@ After the project is created, set your PROJECT_ID to a ```project``` variable.
     gcloud config set project <YOUR_PROJECT_ID>
     ```
 
-1. Check that the Retail API is enabled for your Project in the [Admin Console](https://console.cloud.google.com/ai/retail/).
+2. Check that the Retail API is enabled for your Project in the [Admin Console](https://console.cloud.google.com/ai/retail/).
 
 ### Set up authentication
 
@@ -50,11 +50,11 @@ To run a code sample from the Cloud Shell, you need to be authenticated using th
     gcloud auth login
     ```
 
-1. Type `Y` and press **Enter**. Click the link in Terminal. A browser window should appear asking you to log in using your Gmail account.
+2. Type `Y` and press **Enter**. Click the link in Terminal. A browser window should appear asking you to log in using your Gmail account.
 
-1. Provide the Google Auth Library with access to your credentials and paste the code from the browser to the Terminal.
+3. Provide the Google Auth Library with access to your credentials and paste the code from the browser to the Terminal.
 
-1. Upload your service account key JSON file and use it to activate the service account:
+4. Upload your service account key JSON file and use it to activate the service account:
 
     ```bash
     gcloud iam service-accounts keys create ~/key.json --iam-account <YOUR_SERVICE_ACCOUNT_EMAIL>
@@ -64,7 +64,7 @@ To run a code sample from the Cloud Shell, you need to be authenticated using th
     gcloud auth activate-service-account --key-file  ~/key.json
     ```
 
-1. Set key as the GOOGLE_APPLICATION_CREDENTIALS environment variable to be used for requesting the Retail API:
+5. Set key as the GOOGLE_APPLICATION_CREDENTIALS environment variable to be used for requesting the Retail API:
     ```bash
     export GOOGLE_APPLICATION_CREDENTIALS=~/key.json
     ```
@@ -77,7 +77,7 @@ Because you are going to run the code samples in your own Google Cloud project, 
 
 1. You can find the ```project_number``` in the Project Info card displayed on **Home/Dashboard**.
 
-1. Set the environment variable with the following command:
+2. Set the environment variable with the following command:
     ```bash
     export PROJECT_NUMBER=<YOUR_PROJECT_NUMBER>
     ```
@@ -109,11 +109,11 @@ The code samples for each of the Retail services are stored in different directo
 
 ## Query expansion: AUTO condition
 
-1. Open <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithQueryExpansionSpec.java" regex="TRY DIFFERENT QUERY EXPANSION CONDITION HERE">SearchWithQueryExpansionSpec.java</walkthrough-editor-select-regex>.
+1. Open <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithQueryExpansionSpec.java" regex="TRY DIFFERENT QUERY EXPANSION CONDITION HERE">SearchWithQueryExpansionSpec.java</walkthrough-editor-select-regex>.
 
-1. Here you can see the query expansion condition set with value `AUTO`. The setting enables the query expansion feature and expands the search results.
+2. Here you can see the query expansion condition set with value `AUTO`. The setting enables the query expansion feature and expands the search results.
 
-1. Run the sample in the Terminal using the command:
+3. Run the sample in the Terminal using the command:
     ```bash
     mvn compile exec:java -Dexec.mainClass="search.SearchWithQueryExpansionSpec"
     ```
@@ -124,11 +124,13 @@ As you can see, the results contain products that do not exactly match the searc
 
 Change the condition value to `DISABLED`.
 
-1. Change the condition under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithQueryExpansionSpec.java" regex="TRY DIFFERENT QUERY EXPANSION CONDITION HERE">comment</walkthrough-editor-select-regex> to the following:
+1. Change the condition under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithQueryExpansionSpec.java" regex="TRY DIFFERENT QUERY EXPANSION CONDITION HERE">comment</walkthrough-editor-select-regex> to the following:
 
-   ```condition = SearchRequest.QueryExpansionSpec.Condition.DISABLED```
+   ```terminal
+   condition = Condition.DISABLED
+   ```
 
-1. Run the sample in the Terminal using the command:
+2. Run the sample in the Terminal using the command:
 
     ```bash
     mvn compile exec:java -Dexec.mainClass="search.SearchWithQueryExpansionSpec"

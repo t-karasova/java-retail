@@ -36,7 +36,7 @@ After the project is created, set your PROJECT_ID to a ```project``` variable.
     gcloud config set project <YOUR_PROJECT_ID>
     ```
 
-1. Check that the Retail API is enabled for your Project in the [Admin Console](https://console.cloud.google.com/ai/retail/).
+2. Check that the Retail API is enabled for your Project in the [Admin Console](https://console.cloud.google.com/ai/retail/).
 
 ### Create service account
 
@@ -44,10 +44,10 @@ To access the Retail API you must create a service account.
 
 1. To create service account follow this [instruction](https://cloud.google.com/retail/docs/setting-up#service-account)
 
-1. Find your service account on the [IAM page](https://console.cloud.google.com/iam-admin/iam),
+2. Find your service account on the [IAM page](https://console.cloud.google.com/iam-admin/iam),
    click `Edit` icon and add the roles 'Storage Admin' and 'BigQuery Admin. It may take a while for the changes to take effect.
 
-1. Copy the service account email in the field Principal.
+3. Copy the service account email in the field Principal.
 
 ### Set up authentication
 
@@ -58,11 +58,11 @@ To run a code sample from the Cloud Shell, you need to be authenticated using th
     gcloud auth login
     ```
 
-1. Type `Y` and press **Enter**. Click the link in Terminal. A browser window should appear asking you to log in using your Gmail account.
+2. Type `Y` and press **Enter**. Click the link in Terminal. A browser window should appear asking you to log in using your Gmail account.
 
-1. Provide the Google Auth Library with access to your credentials and paste the code from the browser to the Terminal.
+3. Provide the Google Auth Library with access to your credentials and paste the code from the browser to the Terminal.
 
-1. Upload your service account key JSON file and use it to activate the service account:
+4. Upload your service account key JSON file and use it to activate the service account:
 
     ```bash
     gcloud iam service-accounts keys create ~/key.json --iam-account <YOUR_SERVICE_ACCOUNT_EMAIL>
@@ -72,7 +72,7 @@ To run a code sample from the Cloud Shell, you need to be authenticated using th
     gcloud auth activate-service-account --key-file ~/key.json
     ```
 
-1. Set key as the GOOGLE_APPLICATION_CREDENTIALS environment variable to be used for requesting the Retail API:
+5. Set key as the GOOGLE_APPLICATION_CREDENTIALS environment variable to be used for requesting the Retail API:
     ```bash
     export GOOGLE_APPLICATION_CREDENTIALS=~/key.json
     ```
@@ -84,8 +84,7 @@ To run a code sample from the Cloud Shell, you need to be authenticated using th
 Because you are going to run the code samples in your own Google Cloud project, you should specify the **project_number** as an environment variable. It will be used in every request to the Retail API.
 
 1. You can find the ```project_number``` in the Project Info card displayed on **Home/Dashboard**.
-
-1. Set the environment variable with the following command:
+2. Set the environment variable with the following command:
     ```bash
     export PROJECT_NUMBER=<YOUR_PROJECT_NUMBER>
     ```
@@ -131,12 +130,12 @@ The boosting specification looks like this:
    ```"(colorFamilies: ANY("Blue"))"``` or ```"(rating: IN(4.0, 5.0))"```
 
 <!-- TODO(ianan): change Filtering Tutorial link -->
-   You can learn how to use filters in the [Filtering Tutorial](retail_api_v2_filtering_python.md)
-   or read about it in the [Retail API documentation](https://cloud.google.com/retail/docs/filter-and-order#filter)
+You can learn how to use filters in the [Filtering Tutorial](retail_api_v2_filtering_python.md)
+or read about it in the [Retail API documentation](https://cloud.google.com/retail/docs/filter-and-order#filter)
 
-   The field **```boost```** defines the strength of the condition boost, which should be in the range of -1 to 1. Negative boost means demotion.
+The field **```boost```** defines the strength of the condition boost, which should be in the range of -1 to 1. Negative boost means demotion.
 
-1. Now open <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithBoostSpec.java" regex="boost.*0">SearchWithBoostSpec.java</walkthrough-editor-select-regex>.
+2. Now open <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithBoostSpec.java" regex="boost.*0">SearchWithBoostSpec.java</walkthrough-editor-select-regex>.
 
 
     In the initial request, the boost strength is set to zero: ```boost = 0.0```,
@@ -149,14 +148,14 @@ The boosting specification looks like this:
     ```bash
     mvn compile exec:java -Dexec.mainClass="search.SearchWithBoostSpec"
     ```
-1. Check the response to see the original order of products depending on their relevance to the query phrase.
+2. Check the response to see the original order of products depending on their relevance to the query phrase.
 
-1. Next, change the value of the field **boost** and run the code sample again:
+3. Next, change the value of the field **boost** and run the code sample again:
    ```boost = 1.0```
 
-1. Now you can check the results. The products corresponding to the boost condition became reranked. Now blue products are on the top of the list.
+4. Now you can check the results. The products corresponding to the boost condition became reranked. Now blue products are on the top of the list.
 
-1. If you set ```boost = -1.0```, blue products will appear at the bottom of the search result.
+5. If you set ```boost = -1.0```, blue products will appear at the bottom of the search result.
 
 ## Some notes about boosting
 
@@ -171,7 +170,7 @@ You can combine up to 10 boost specifications in one search request. In this way
 
 Feel free to test product boosting yourself right now in the Cloud Shell environment.
 
-Replace the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithBoostSpec.java" regex="condition = '.*'">condition</walkthrough-editor-select-regex> expression with something like this:
+Replace the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithBoostSpec.java" regex="condition = '.*'">condition</walkthrough-editor-select-regex> expression with something like this:
 
 ```
 condition = "(categories: ANY("Office"))"
@@ -183,7 +182,7 @@ Or
 condition = "(attributes.material: ANY("Cotton", "Polyester")) AND (brands: ANY("Google"))"
 ```
 
-At the same time, you can test the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithBoostSpec.java" regex="boost = (\D)?\d.*">boost strength</walkthrough-editor-select-regex> by setting any value from -1 to 1.
+At the same time, you can test the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithBoostSpec.java" regex="boost = (\D)?\d.*">boost strength</walkthrough-editor-select-regex> by setting any value from -1 to 1.
 
 ## Error handling
 
@@ -196,18 +195,18 @@ To check the list of text and numeric fields that support boosting, use the [Ret
 
 If you try to boost the search results and set a condition in the field that is not supported for boosting (for example, the **name** field), you will get an error message.
 
-1. Change the variable <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithBoostSpec.java" regex="condition = '.*'">condition</walkthrough-editor-select-regex> value to the following:
+1. Change the variable <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithBoostSpec.java" regex="condition = '.*'">condition</walkthrough-editor-select-regex> value to the following:
    ``` condition = "(name: ANY("some_random"))"```
 
-1. Run the code again:
+2. Run the code again:
     ```bash
     mvn compile exec:java -Dexec.mainClass="search.SearchWithBoostSpec"
     ```
 
-1. You should see the following error message:
+3. You should see the following error message:
 
     ```terminal
-    google.api_core.exceptions.InvalidArgument: 400 Invalid filter syntax '(name: ANY("some_random"))'. Parsing filter failed with error: Unsupported field "name" on ":" operator.
+    com.google.api.gax.rpc.InvalidArgumentException: io.grpc.StatusRuntimeException: INVALID_ARGUMENT: google.api_core.exceptions.InvalidArgument: 400 Invalid filter syntax '(name: ANY("some_random"))'. Parsing filter failed with error: Unsupported field "name" on ":" operator.
     ```
 
 ## Congratulations

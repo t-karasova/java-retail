@@ -40,7 +40,7 @@ After the project is created, set your PROJECT_ID to a ```project``` variable.
     gcloud config set project <YOUR_PROJECT_ID>
     ```
 
-1. Check that the Retail API is enabled for your Project in the [Admin Console](https://console.cloud.google.com/ai/retail/).
+2. Check that the Retail API is enabled for your Project in the [Admin Console](https://console.cloud.google.com/ai/retail/).
 
 ### Set up authentication
 
@@ -51,11 +51,11 @@ To run a code sample from the Cloud Shell, you need to be authenticated using th
     gcloud auth login
     ```
 
-1. Type `Y` and press **Enter**. Click the link in Terminal. A browser window should appear asking you to log in using your Gmail account.
+2. Type `Y` and press **Enter**. Click the link in Terminal. A browser window should appear asking you to log in using your Gmail account.
 
-1. Provide the Google Auth Library with access to your credentials and paste the code from the browser to the Terminal.
+3. Provide the Google Auth Library with access to your credentials and paste the code from the browser to the Terminal.
 
-1. Upload your service account key JSON file and use it to activate the service account:
+4. Upload your service account key JSON file and use it to activate the service account:
 
     ```bash
     gcloud iam service-accounts keys create ~/key.json --iam-account <YOUR_SERVICE_ACCOUNT_EMAIL>
@@ -65,7 +65,7 @@ To run a code sample from the Cloud Shell, you need to be authenticated using th
     gcloud auth activate-service-account --key-file  ~/key.json
     ```
 
-1. Set key as the GOOGLE_APPLICATION_CREDENTIALS environment variable to be used for requesting the Retail API:
+5. Set key as the GOOGLE_APPLICATION_CREDENTIALS environment variable to be used for requesting the Retail API:
     ```bash
     export GOOGLE_APPLICATION_CREDENTIALS=~/key.json
     ```
@@ -78,7 +78,7 @@ Because you are going to run the code samples in your own Google Cloud project, 
 
 1. You can find the ```project_number``` in the Project Info card displayed on **Home/Dashboard**.
 
-1. Set the environment variable with the following command:
+2. Set the environment variable with the following command:
     ```bash
     export PROJECT_NUMBER=<YOUR_PROJECT_NUMBER>
     ```
@@ -120,20 +120,20 @@ An example of such an expression is
 ```"(colorFamilies: ANY("Black"))"```
 
 1. To see the whole request with the filtering applied, open
-   <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">SearchWithFiltering.java</walkthrough-editor-select-regex>.
+   <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">SearchWithFiltering.java</walkthrough-editor-select-regex>.
 
-1. Run the following command in Terminal:
+2. Run the following command in Terminal:
     ```bash
     mvn compile exec:java -Dexec.mainClass="search.SearchWithFiltering"
     ```
 
-1. Note that the results contain only items that satisfy the filtering expression.
+3. Note that the results contain only items that satisfy the filtering expression.
 
 ## Filter by text field: Use case
 
 Now you can try filtering by a text field yourself in the Cloud Shell environment.
 
-1. To do that, replace the condition under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> with one of the following samples:
+1. To do that, replace the condition under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> with one of the following samples:
     ```
     filter = "(brands: ANY("YouTube"))"
     ```
@@ -155,19 +155,18 @@ To filter by a numeric field, you can write the filtering expression in two ways
 - To check whether the field value is within a range, use the function `IN`.
 - To compare a field value with a double value, use operators `<=`,  `<`,  `>=`, `>` and `=`.
 
-1. To use the function `IN` to search for products with a price between $15 and $45, change the filter expression under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> to the following:
-
+1. To use the function `IN` to search for products with a price between $15 and $45, change the filter expression under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> to the following:
 
     ```
     filter = "price: IN(15.0, 45.0)"
     ```
 
-1. Run the following command in Terminal:
+2. Run the following command in Terminal:
     ```bash
     mvn compile exec:java -Dexec.mainClass="search.SearchWithFiltering"
     ```
 
-1. Check the search response. Now it contains only items with prices in the range of $15 to $45.
+3. Check the search response. Now it contains only items with prices in the range of $15 to $45.
 
 To see the complete list of the numeric fields you can apply filters to, see the [Retail API documentation](https://cloud.google.com/retail/docs/filter-and-order#filter).
 
@@ -175,17 +174,17 @@ To see the complete list of the numeric fields you can apply filters to, see the
 
 All comparison operators (`<=`,  `<`,  `>=`, `>` and `=`) are available for filtering expressions.
 
-1. Change the filter expression under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> to the following:
+1. Change the filter expression under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> to the following:
     ```
     filter = "price >= 15.0 AND price < 45.0"
     ```
 
-1. Run the following command in Terminal:
+2. Run the following command in Terminal:
     ```bash
     mvn compile exec:java -Dexec.mainClass="search.SearchWithFiltering"
     ```
 
-1. Check the search response. Now it contains only items with prices in the range between $15 and $45.
+3. Check the search response. Now it contains only items with prices in the range between $15 and $45.
 
 ## Filter by multiple fields
 
@@ -193,7 +192,7 @@ To filter the search results by multiple fields, you can combine the expressions
 
 ```filter = expression { " AND " | " OR " } expression```
 
-1. Change the filter expression under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> to the following:
+1. Change the filter expression under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> to the following:
     ```
     filter = "(categories: ANY("Apparel")) AND (price: IN(30.0, *))"
     ```
@@ -215,7 +214,7 @@ To check a list of text and numeric fields that support filtering, use the [Reta
 
 If you try to filter the search results by a field that is not intended for filtering, for example, the `name` field, you will get an error message.
 
-1. Change the variable `filter` value under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> to the following:
+1. Change the variable `filter` value under the <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithFiltering.java" regex="TRY DIFFERENT FILTER EXPRESSIONS HERE">comment</walkthrough-editor-select-regex> to the following:
 
     ```
     filter = "(name: ANY("some_random"))"
@@ -229,7 +228,7 @@ If you try to filter the search results by a field that is not intended for filt
 3. You should see the following error message:
 
     ```terminal
-    google.api_core.exceptions.InvalidArgument: 400 Invalid filter syntax '(name: ANY("some_random"))'. Parsing filter failed with error: Unsupported field "name" on ":" operator.
+    com.google.api.gax.rpc.InvalidArgumentException: io.grpc.StatusRuntimeException: INVALID_ARGUMENT: Invalid filter syntax '(name: ANY("some_random"))'. Parsing filter failed with error: Unsupported field "name" on ":" operator.
     ```
 
 ## Congratulations

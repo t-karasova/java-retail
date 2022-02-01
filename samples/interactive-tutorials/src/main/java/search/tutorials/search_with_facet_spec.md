@@ -34,7 +34,7 @@ After the project is created, set your PROJECT_ID to a ```project``` variable.
     gcloud config set project <YOUR_PROJECT_ID>
     ```
 
-1. Check that the Retail API is enabled for your Project in the [Admin Console](https://console.cloud.google.com/ai/retail/).
+2. Check that the Retail API is enabled for your Project in the [Admin Console](https://console.cloud.google.com/ai/retail/).
 
 ### Set up authentication
 
@@ -46,11 +46,11 @@ To run a code sample from the Cloud Shell, you need to authenticate. To do this,
     gcloud auth application-default login
     ```
 
-1. Type `Y` and press **Enter**. Click the link in Terminal. A browser window should appear asking you to log in using your Gmail account.
+2. Type `Y` and press **Enter**. Click the link in Terminal. A browser window should appear asking you to log in using your Gmail account.
 
-1. Provide the Google Auth Library with access to your credentials and paste the code from the browser to the Terminal.
+3. Provide the Google Auth Library with access to your credentials and paste the code from the browser to the Terminal.
 
-1. Run the code sample and check the Retail API in action.
+4. Run the code sample and check the Retail API in action.
 
 **Note**: Click the copy button on the side of the code box to paste the command in the Cloud Shell terminal and run it.
 
@@ -60,7 +60,7 @@ Because you are going to run the code samples in your own Google Cloud project, 
 
 1. You can find the ```project_number``` in the Project Info card displayed on **Home/Dashboard**.
 
-1. Set the environment variable with the following command:
+2. Set the environment variable with the following command:
     ```bash
     export PROJECT_NUMBER=<YOUR_PROJECT_NUMBER>
     ```
@@ -100,7 +100,7 @@ the search request body, explicitly passing product attributes as facets.
    textual o numerical field name. The full list of the facet keys you can find
    in the [Retail documentation.](https://cloud.google.com/retail/docs/reference/rpc/google.cloud.retail.v2#facetkey)
 
-2. Now open <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/search/SearchWithFacetSpec.java" regex="boost.*0">SearchWithFacetSpec.java</walkthrough-editor-select-regex>.
+2. Now open <walkthrough-editor-select-regex filePath="cloudshell_open/interactive-tutorials/src/main/java/search/SearchWithFacetSpec.java" regex="boost.*0">SearchWithFacetSpec.java</walkthrough-editor-select-regex>.
 
    In the initial request, the textual facet "colorFamilies" is going to be returned.
 
@@ -123,7 +123,7 @@ the search request body, explicitly passing product attributes as facets.
     ```bash
     mvn compile exec:java -Dexec.mainClass="search.SearchWithFacetSpec"
     ```
-1. Check the response contains the object **```facets```**:
+2. Check the response contains the object **```facets```**:
 
 ```
 facets {
@@ -165,7 +165,7 @@ facets {
 
 ```facetKey = "brands"```
 
-1. Now you can check the results. The **facets** object now contains barnds:
+2. Now you can check the results. The **facets** object now contains barnds:
 ```
 facets {
   key: "brands"
@@ -175,7 +175,7 @@ facets {
   }
   values {
     value: "Android"
-    count: 12
+    count: 10
   }
   values {
     value: "Google"
@@ -204,18 +204,24 @@ Let's modify the ```SearchRequest``` to get price facet with two price intervals
 
 Define the Interval in the **```getSearchRequest()```**, add the following code:
 ```
-    interval1 = Interval()
-    interval1.minimum = 0.0
-    interval1.maximum = 25.0
-    interval2 = Interval()
-    interval2.minimum = 26.0
-    interval2.maximum = 50.0
+    Interval interval1 = Interval.newBuilder()
+        .setMinimum(0.0)
+        .setMaximum(25.0)
+        .build();
+
+    Interval interval2 = Interval.newBuilder()
+        .setMinimum(26.0)
+        .setMaximum(50.0)
+        .build();
 ```
 
-Add the **```intervals```** field to the ```facet_key```:
+Add all **```intervals```** field to the ```facetKey```:
 
 ```
-facet_key.intervals = [interval1, interval2]
+    FacetKey facetKey = FacetKey.newBuilder()
+        .setKey(facetKeyParam)
+        .addAllIntervals(Arrays.asList(interval1, interval2))
+        .build();
 ```
 
 Next, change the ```facet_key``` value in the ```search()``` function:
@@ -226,10 +232,11 @@ facetKey = "price"
 ## Getting numerical facets. Result analyse
 
 1. Run the sample in a terminal with the following command:
-    ```bash
-    mvn compile exec:java -Dexec.mainClass="search.SearchWithFacetSpec"
-    ```
-1. Check the response contains the object **```facets```**:
+```bash
+mvn compile exec:java -Dexec.mainClass="search.SearchWithFacetSpec"
+```
+   
+2. Check the response contains the object **```facets```**:
 
 ```
 facets {
@@ -246,7 +253,7 @@ facets {
       minimum: 26.0
       maximum: 50.0
     }
-    count: 35
+    count: 33
   }
 }
 ```
