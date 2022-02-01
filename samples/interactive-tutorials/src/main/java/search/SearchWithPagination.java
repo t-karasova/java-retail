@@ -26,29 +26,39 @@ package search;
 import com.google.cloud.retail.v2.SearchRequest;
 import com.google.cloud.retail.v2.SearchResponse;
 import com.google.cloud.retail.v2.SearchServiceClient;
+import com.google.cloud.retail.v2.SearchServiceClient.SearchPagedResponse;
 import java.io.IOException;
 import java.util.UUID;
 
 public final class SearchWithPagination {
 
-  /** This variable describes project number getting from environment variable. */
-  private static final String YOUR_PROJECT_NUMBER = System.getenv("PROJECT_NUMBER");
-
-  /** This variable describes default catalog name. */
-  private static final String DEFAULT_CATALOG_NAME =
-      String.format("projects/%s/locations/global/catalogs/default_catalog", YOUR_PROJECT_NUMBER);
+  /**
+   * This variable describes project number getting from environment variable.
+   */
+  private static final String YOUR_PROJECT_NUMBER = System.getenv(
+      "PROJECT_NUMBER");
 
   /**
-   * This variable describes default search placement name. Using for identify the Serving Config
-   * name.
+   * This variable describes default catalog name.
+   */
+  private static final String DEFAULT_CATALOG_NAME =
+      String.format("projects/%s/locations/global/catalogs/default_catalog",
+          YOUR_PROJECT_NUMBER);
+
+  /**
+   * This variable describes default search placement name. Using for identify
+   * the Serving Config name.
    */
   private static final String DEFAULT_SEARCH_PLACEMENT_NAME =
       DEFAULT_CATALOG_NAME + "/placements/default_search";
 
-  /** This variable describes a unique identifier to track visitors. */
+  /**
+   * This variable describes a unique identifier to track visitors.
+   */
   private static final String VISITOR_ID = UUID.randomUUID().toString();
 
-  private SearchWithPagination() {}
+  private SearchWithPagination() {
+  }
 
   /**
    * Get search service client.
@@ -56,21 +66,23 @@ public final class SearchWithPagination {
    * @return SearchServiceClient.
    * @throws IOException if endpoint is incorrect.
    */
-  private static SearchServiceClient getSearchServiceClient() throws IOException {
+  private static SearchServiceClient getSearchServiceClient()
+      throws IOException {
     return SearchServiceClient.create();
   }
 
   /**
    * Get search service request.
    *
-   * @param query search keyword.
-   * @param pageSize page size.
-   * @param offset offset.
+   * @param query     search keyword.
+   * @param pageSize  page size.
+   * @param offset    offset.
    * @param pageToken page token.
    * @return SearchRequest.
    */
   public static SearchRequest getSearchRequest(
-      final String query, final int pageSize, final int offset, final String pageToken) {
+      final String query, final int pageSize, final int offset,
+      final String pageToken) {
 
     SearchRequest searchRequest =
         SearchRequest.newBuilder()
@@ -82,7 +94,7 @@ public final class SearchWithPagination {
             .setPageToken(pageToken)
             .build();
 
-    System.out.println("Search request: " + searchRequest);
+    System.out.printf("Search request: %n%s", searchRequest);
 
     return searchRequest;
   }
@@ -99,10 +111,12 @@ public final class SearchWithPagination {
     int offset = 0;
     String pageToken = "";
 
-    SearchRequest searchRequestFirstPage = getSearchRequest("Hoodie", pageSize, offset, pageToken);
+    SearchRequest searchRequestFirstPage = getSearchRequest("Hoodie", pageSize,
+        offset, pageToken);
 
     SearchResponse searchResponseFirstPage =
-        getSearchServiceClient().search(searchRequestFirstPage).getPage().getResponse();
+        getSearchServiceClient().search(searchRequestFirstPage).getPage()
+            .getResponse();
 
     System.out.println("Search response: " + searchResponseFirstPage);
 

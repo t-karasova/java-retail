@@ -32,24 +32,33 @@ import java.util.UUID;
 
 public final class SearchWithBoostSpec {
 
-  /** This variable describes project number getting from environment variable. */
-  private static final String YOUR_PROJECT_NUMBER = System.getenv("PROJECT_NUMBER");
-
-  /** This variable describes default catalog name. */
-  private static final String DEFAULT_CATALOG_NAME =
-      String.format("projects/%s/locations/global/catalogs/default_catalog", YOUR_PROJECT_NUMBER);
+  /**
+   * This variable describes project number getting from environment variable.
+   */
+  private static final String YOUR_PROJECT_NUMBER = System.getenv(
+      "PROJECT_NUMBER");
 
   /**
-   * This variable describes default search placement name. Using for identify the Serving Config
-   * name.
+   * This variable describes default catalog name.
+   */
+  private static final String DEFAULT_CATALOG_NAME =
+      String.format("projects/%s/locations/global/catalogs/default_catalog",
+          YOUR_PROJECT_NUMBER);
+
+  /**
+   * This variable describes default search placement name. Using for identify
+   * the Serving Config name.
    */
   private static final String DEFAULT_SEARCH_PLACEMENT_NAME =
       DEFAULT_CATALOG_NAME + "/placements/default_search";
 
-  /** This variable describes a unique identifier to track visitors. */
+  /**
+   * This variable describes a unique identifier to track visitors.
+   */
   private static final String VISITOR_ID = UUID.randomUUID().toString();
 
-  private SearchWithBoostSpec() {}
+  private SearchWithBoostSpec() {
+  }
 
   /**
    * Get search service client.
@@ -57,15 +66,16 @@ public final class SearchWithBoostSpec {
    * @return SearchServiceClient.
    * @throws IOException if endpoint is incorrect.
    */
-  private static SearchServiceClient getSearchServiceClient() throws IOException {
+  private static SearchServiceClient getSearchServiceClient()
+      throws IOException {
     return SearchServiceClient.create();
   }
 
   /**
    * Get search service request.
    *
-   * @param query search keyword.
-   * @param condition provides search clarification.
+   * @param query         search keyword.
+   * @param condition     provides search clarification.
    * @param boostStrength is a rate of boost strength.
    * @return SearchRequest.
    */
@@ -92,7 +102,7 @@ public final class SearchWithBoostSpec {
             .setPageSize(pageSize)
             .build();
 
-    System.out.println("Search request: " + searchRequest);
+    System.out.printf("Search request: %n%s", searchRequest);
 
     return searchRequest;
   }

@@ -84,7 +84,7 @@ public final class SearchWithFiltering {
             .setFilter(filter)
             .build();
 
-    System.out.println("Search request: " + searchRequest);
+    System.out.printf("Search request: %n%s", searchRequest);
 
     return searchRequest;
   }
